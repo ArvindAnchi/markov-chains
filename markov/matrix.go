@@ -7,13 +7,13 @@ import (
 )
 
 type Matrix struct {
-	Rows   uint16
-	Cols   uint16
-	stride uint16
+	Rows   int
+	Cols   int
+	stride int
 	es     []uint8
 }
 
-func NewMat(rows, cols uint16) *Matrix {
+func NewMat(rows, cols int) *Matrix {
 	es := make([]uint8, rows*cols)
 
 	return &Matrix{
@@ -24,7 +24,7 @@ func NewMat(rows, cols uint16) *Matrix {
 	}
 }
 
-func (m *Matrix) idxOf(row, col uint16) (uint16, error) {
+func (m *Matrix) idxOf(row, col int) (int, error) {
 	if col > m.Cols {
 		return 0, errors.New(fmt.Sprintf("MAT_IDOF: Column %d out of bounds for matrix with %d columns", col, m.Cols))
 	}
@@ -35,7 +35,7 @@ func (m *Matrix) idxOf(row, col uint16) (uint16, error) {
 	return row*m.stride + col, nil
 }
 
-func (m *Matrix) Inc(row, col uint16) error {
+func (m *Matrix) Inc(row, col int) error {
 	i, err := m.idxOf(row, col)
 
 	if err != nil {
@@ -47,7 +47,7 @@ func (m *Matrix) Inc(row, col uint16) error {
 	return nil
 }
 
-func (m *Matrix) Sample(rowIdx uint16) (uint16, error) {
+func (m *Matrix) Sample(rowIdx int) (uint16, error) {
 	sIdx, err := m.idxOf(rowIdx, 0)
 	eIdx := sIdx + m.Cols
 
@@ -74,7 +74,7 @@ func (m *Matrix) Sample(rowIdx uint16) (uint16, error) {
 	return 0, errors.New("MAT_SAMPLE: Reached unreachable")
 }
 
-func (m *Matrix) Row(rowIdx uint16) (*Matrix, error) {
+func (m *Matrix) Row(rowIdx int) (*Matrix, error) {
 	sIdx, err := m.idxOf(rowIdx, 0)
 	eIdx := sIdx + m.Cols
 
