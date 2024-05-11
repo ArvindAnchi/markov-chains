@@ -40,8 +40,6 @@ func (t *Tokenizer) Print() {
 	for tok, i := range t.vocab {
 		fmt.Printf("'%s' -> %d\n", tok, i)
 	}
-
-	fmt.Printf("%d tokens in vocab\n", len(t.vocab))
 }
 
 func (t *Tokenizer) Encode(text string) []uint16 {
