@@ -66,7 +66,7 @@ func (m *Matrix) Sample(rowIdx int) (uint16, error) {
 			return uint16(i), nil
 		}
 
-		t -= int(tp)
+		r -= int(tp)
 	}
 
 	return 0, errors.New("MAT_SAMPLE: Reached unreachable")
