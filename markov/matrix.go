@@ -7,20 +7,18 @@ import (
 )
 
 type Matrix struct {
-	Rows   int
-	Cols   int
-	stride int
-	es     []uint8
+	Rows int
+	Cols int
+	es   []uint8
 }
 
 func NewMat(rows, cols int) *Matrix {
 	es := make([]uint8, rows*cols)
 
 	return &Matrix{
-		Rows:   rows,
-		Cols:   cols,
-		stride: cols,
-		es:     es,
+		Rows: rows,
+		Cols: cols,
+		es:   es,
 	}
 }
 
@@ -32,7 +30,7 @@ func (m *Matrix) idxOf(row, col int) (int, error) {
 		return 0, errors.New(fmt.Sprintf("MAT_IDOF: Row %d out of bounds for matrix with %d rows", col, m.Cols))
 	}
 
-	return row*m.stride + col, nil
+	return row * col, nil
 }
 
 func (m *Matrix) Inc(row, col int) error {
@@ -83,9 +81,8 @@ func (m *Matrix) Row(rowIdx int) (*Matrix, error) {
 	}
 
 	return &Matrix{
-		Rows:   1,
-		Cols:   m.Cols,
-		stride: m.stride,
-		es:     m.es[sIdx:eIdx],
+		Rows: 1,
+		Cols: m.Cols,
+		es:   m.es[sIdx:eIdx],
 	}, nil
 }
