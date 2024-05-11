@@ -9,11 +9,11 @@ import (
 type Matrix struct {
 	Rows int
 	Cols int
-	es   []uint8
+	es   []uint16
 }
 
 func NewMat(rows, cols int) *Matrix {
-	es := make([]uint8, rows*cols)
+	es := make([]uint16, rows*cols)
 
 	return &Matrix{
 		Rows: rows,
@@ -33,6 +33,45 @@ func (m *Matrix) idxOf(row, col int) (int, error) {
 	return row * col, nil
 }
 
+func (m *Matrix) Print() {
+	fmt.Print(" = [\n")
+
+	for i := 0; i < m.Rows; i++ {
+		for j := 0; j < m.Cols; j++ {
+			idx, err := m.idxOf(i, j)
+			if err != nil {
+				panic("")
+			}
+			fmt.Printf("\t%d ", m.es[idx])
+		}
+
+		fmt.Printf("\n")
+	}
+
+	fmt.Print("]\n")
+}
+
+func (m *Matrix) Fill(value uint16) {
+	for i := 0; i < len(m.es); i++ {
+		m.es[i] = value
+	}
+}
+
+func (m *Matrix) Sum(m1 *Matrix) error {
+	if m.Cols != m1.Cols {
+		return errors.New(fmt.Sprintf("MAT_SUM: Incompatable shapes m:(%d %d) and m1:(%d %d)", m.Rows, m.Cols, m1.Rows, m1.Cols))
+	}
+	if m.Rows != m1.Rows {
+		return errors.New(fmt.Sprintf("MAT_SUM: Incompatable shapes m:(%d %d) and m1:(%d %d)", m.Rows, m.Cols, m1.Rows, m1.Cols))
+	}
+
+	for i := 0; i < len(m.es); i++ {
+		m.es[i] += m1.es[i]
+	}
+
+	return nil
+}
+
 func (m *Matrix) Inc(row, col int) error {
 	i, err := m.idxOf(row, col)
 
@@ -40,7 +79,11 @@ func (m *Matrix) Inc(row, col int) error {
 		return err
 	}
 
-	m.es[i] += 1
+	if m.es[i] < 65535 {
+		m.es[i] += 1
+	} else {
+		fmt.Printf("overflow %d %d\n", row, col)
+	}
 
 	return nil
 }
