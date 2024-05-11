@@ -32,6 +32,10 @@ func NewTokenizer(corpus string) *Tokenizer {
 	}
 }
 
+func (t *Tokenizer) Vocab() *map[string]uint16 {
+	return &t.vocab
+}
+
 func (t *Tokenizer) Print() {
 	for tok, i := range t.vocab {
 		fmt.Printf("'%s' -> %d\n", tok, i)
