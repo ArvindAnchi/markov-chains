@@ -33,7 +33,7 @@ func (m *Matrix) idxOf(row, col int) (int, error) {
 		return 0, errors.New(fmt.Sprintf("MAT_IDOF: Row %d out of bounds for matrix with %d rows", col, m.Cols))
 	}
 
-	return row * col, nil
+	return row*col + col - 1, nil
 }
 
 func (m *Matrix) Print(t *Tokenizer) {
@@ -88,7 +88,6 @@ func (m *Matrix) Sum(m1 *Matrix) error {
 
 func (m *Matrix) Inc(row, col int) error {
 	i, err := m.idxOf(row, col)
-
 	if err != nil {
 		return err
 	}
@@ -105,7 +104,7 @@ func (m *Matrix) Inc(row, col int) error {
 }
 
 func (m *Matrix) Sample(rowIdx int) (uint16, error) {
-	sIdx, err := m.idxOf(rowIdx, 0)
+	sIdx, err := m.idxOf(rowIdx, 1)
 	eIdx := sIdx + m.Cols
 
 	if err != nil {
@@ -132,7 +131,7 @@ func (m *Matrix) Sample(rowIdx int) (uint16, error) {
 }
 
 func (m *Matrix) Row(rowIdx int) (*Matrix, error) {
-	sIdx, err := m.idxOf(rowIdx, 0)
+	sIdx, err := m.idxOf(rowIdx, 1)
 	eIdx := sIdx + m.Cols
 
 	if err != nil {
