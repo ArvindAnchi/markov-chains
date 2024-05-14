@@ -3,7 +3,10 @@ package markov
 import (
 	"errors"
 	"fmt"
+	"log"
 	"math/rand/v2"
+
+	. "markov.chains/tokenizer"
 )
 
 type Matrix struct {
@@ -33,16 +36,27 @@ func (m *Matrix) idxOf(row, col int) (int, error) {
 	return row * col, nil
 }
 
-func (m *Matrix) Print() {
-	fmt.Print(" = [\n")
+func (m *Matrix) Print(t *Tokenizer) {
+	fmt.Print(m.es)
+	fmt.Print("[\n\t")
 
-	for i := 0; i < m.Rows; i++ {
-		for j := 0; j < m.Cols; j++ {
+	for j := 1; j < m.Cols; j++ {
+		fmt.Printf("%s:\t", t.Decode(uint16(j)))
+	}
+
+	fmt.Print("\n")
+
+	for i := 1; i < m.Rows; i++ {
+		fmt.Printf("%s:", t.Decode(uint16(i)))
+
+		for j := 1; j < m.Cols; j++ {
 			idx, err := m.idxOf(i, j)
+
 			if err != nil {
-				panic("")
+				panic(err)
 			}
-			fmt.Printf("\t%d ", m.es[idx])
+
+			fmt.Printf("\t%d", m.es[idx])
 		}
 
 		fmt.Printf("\n")
@@ -78,6 +92,8 @@ func (m *Matrix) Inc(row, col int) error {
 	if err != nil {
 		return err
 	}
+
+	log.Printf("Increment %d, %d [Idx: %d]", row, col, i)
 
 	if m.es[i] < 65535 {
 		m.es[i] += 1

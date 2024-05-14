@@ -15,6 +15,7 @@ func main() {
 	vc := len(*t.Vocab())
 	toks := t.Encode(d)
 
+	fmt.Printf("Train sentence = %s\n", d)
 	fmt.Printf("Vocab length = %d\n", vc)
 
 	mn1 := NewMat(vc, vc)
@@ -36,8 +37,8 @@ func main() {
 		}
 	}
 
-	mn1.Print()
-	mn2.Print()
+	mn1.Print(t)
+	mn2.Print(t)
 
 	prompt := "The"
 
