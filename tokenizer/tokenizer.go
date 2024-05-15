@@ -18,7 +18,7 @@ func NewTokenizer(corpus string) *Tokenizer {
 	toks := re.FindAll([]byte(corpus), -1)
 
 	v := make(map[string]uint16)
-	i := 1
+	i := 0
 
 	for _, tok := range toks {
 		if _, ok := v[string(tok)]; !ok {
@@ -52,7 +52,7 @@ func (t *Tokenizer) Encode(text string) []uint16 {
 		if tokId, ok := t.vocab[string(tok)]; ok {
 			tokens[i] = tokId
 		} else {
-			tokens[i] = 0
+			tokens[i] = 65535
 		}
 	}
 

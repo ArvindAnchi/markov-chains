@@ -30,26 +30,26 @@ func (m *Matrix) idxOf(row, col int) (int, error) {
 		return 0, errors.New(fmt.Sprintf("MAT_IDOF: Column %d out of bounds for matrix with %d columns", col, m.Cols))
 	}
 	if row > m.Rows {
-		return 0, errors.New(fmt.Sprintf("MAT_IDOF: Row %d out of bounds for matrix with %d rows", col, m.Cols))
+		return 0, errors.New(fmt.Sprintf("MAT_IDOF: Row %d out of bounds for matrix with %d rows", row, m.Rows))
 	}
 
-	return row*col + col - 1, nil
+	return row*m.Cols + col, nil
 }
 
 func (m *Matrix) Print(t *Tokenizer) {
 	fmt.Print(m.es)
 	fmt.Print("[\n\t")
 
-	for j := 1; j < m.Cols; j++ {
+	for j := 0; j < m.Cols; j++ {
 		fmt.Printf("%s:\t", t.Decode(uint16(j)))
 	}
 
 	fmt.Print("\n")
 
-	for i := 1; i < m.Rows; i++ {
+	for i := 0; i < m.Rows; i++ {
 		fmt.Printf("%s:", t.Decode(uint16(i)))
 
-		for j := 1; j < m.Cols; j++ {
+		for j := 0; j < m.Cols; j++ {
 			idx, err := m.idxOf(i, j)
 
 			if err != nil {
