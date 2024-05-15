@@ -45,8 +45,9 @@ func main() {
 
 	fmt.Print(prompt)
 
-	for i := 0; i < 10; i++ {
-		tok := t.Encode(prompt)[0]
+	for i := 0; i < 30; i++ {
+		enc := t.Encode(prompt)
+		tok := enc[len(enc)-1]
 
 		sm := NewMat(1, vc)
 		sm.Fill(0)
