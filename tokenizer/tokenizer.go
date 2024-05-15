@@ -60,6 +60,10 @@ func (t *Tokenizer) Encode(text string) []uint16 {
 }
 
 func (t *Tokenizer) Decode(tok uint16) string {
+	if tok == 65535 {
+		return "<UNK>"
+	}
+
 	for vtok, i := range t.vocab {
 		if i == tok {
 			return vtok
