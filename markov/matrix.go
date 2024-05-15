@@ -78,6 +78,9 @@ func (m *Matrix) Sum(m1 *Matrix) error {
 	if m.Rows != m1.Rows {
 		return errors.New(fmt.Sprintf("MAT_SUM: Incompatable shapes m:(%d %d) and m1:(%d %d)", m.Rows, m.Cols, m1.Rows, m1.Cols))
 	}
+	if len(m.es) != len(m1.es) {
+		return errors.New(fmt.Sprintf("MAT_SUM: Incompatable inner array sizes m:(%d) and m1:(%d)", len(m.es), len(m1.es)))
+	}
 
 	for i := 0; i < len(m.es); i++ {
 		m.es[i] += m1.es[i]
