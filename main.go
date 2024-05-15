@@ -9,14 +9,12 @@ import (
 )
 
 func main() {
-	d := " The first one to say the thing is a fool"
+	d := "The first one to say the thing is a fool"
 	t := NewTokenizer(d)
 
 	vc := len(*t.Vocab())
 	toks := t.Encode(d)
 
-	fmt.Printf("Train sentence = %s\n", d)
-	fmt.Printf("Vocab = %v\n", t.Vocab())
 	fmt.Printf("Vocab length = %d\n", vc)
 
 	mn1 := NewMat(vc, vc)
@@ -37,9 +35,6 @@ func main() {
 			log.Fatal(err)
 		}
 	}
-
-	mn1.Print(t)
-	mn2.Print(t)
 
 	prompt := "The"
 

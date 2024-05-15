@@ -3,7 +3,6 @@ package markov
 import (
 	"errors"
 	"fmt"
-	"log"
 	"math/rand/v2"
 
 	. "markov.chains/tokenizer"
@@ -94,8 +93,6 @@ func (m *Matrix) Inc(row, col int) error {
 	if err != nil {
 		return err
 	}
-
-	log.Printf("Increment %d, %d [Idx: %d]", row, col, i)
 
 	if m.es[i] < 65535 {
 		m.es[i] += 1
