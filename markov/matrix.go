@@ -104,7 +104,7 @@ func (m *Matrix) Inc(row, col int) error {
 }
 
 func (m *Matrix) Sample(rowIdx int) (uint16, error) {
-	sIdx, err := m.idxOf(rowIdx, 1)
+	sIdx, err := m.idxOf(rowIdx, 0)
 	eIdx := sIdx + m.Cols
 
 	if err != nil {
@@ -117,21 +117,25 @@ func (m *Matrix) Sample(rowIdx int) (uint16, error) {
 		t += int(tp)
 	}
 
+	if t == 0 {
+		return uint16(rand.IntN(m.Cols)), nil
+	}
+
 	r := rand.IntN(t)
 
 	for i, tp := range m.es[sIdx:eIdx] {
+		r -= int(tp)
+
 		if r < 0 {
 			return uint16(i), nil
 		}
-
-		r -= int(tp)
 	}
 
-	return 0, errors.New("MAT_SAMPLE: Reached unreachable")
+	return 0, errors.New(fmt.Sprintf("MAT_SAMPLE: Reached unreachable (r=%d)", r))
 }
 
 func (m *Matrix) Row(rowIdx int) (*Matrix, error) {
-	sIdx, err := m.idxOf(rowIdx, 1)
+	sIdx, err := m.idxOf(rowIdx, 0)
 	eIdx := sIdx + m.Cols
 
 	if err != nil {
