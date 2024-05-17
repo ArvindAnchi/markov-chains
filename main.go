@@ -20,6 +20,7 @@ func main() {
 	m := NewModel(2, t)
 
 	m.Train(d)
+	m.Print()
 
 	prompt := "The"
 

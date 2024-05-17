@@ -24,6 +24,12 @@ func NewModel(layerCount int, tokenizer *Tokenizer) *Model {
 	}
 }
 
+func (m *Model) Print() {
+	for _, mat := range m.layers {
+		mat.Print(m.tokenizer)
+	}
+}
+
 func (m *Model) Train(data string) error {
 	toks := m.tokenizer.Encode(data)
 
