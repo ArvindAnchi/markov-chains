@@ -70,7 +70,7 @@ func (m *Matrix) Fill(value uint16) {
 	}
 }
 
-func (m *Matrix) Sum(m1 *Matrix) error {
+func (m *Matrix) Nudge(m1 *Matrix) error {
 	if m.Cols != m1.Cols {
 		return errors.New(fmt.Sprintf("MAT_SUM: Incompatable shapes m:(%d %d) and m1:(%d %d)", m.Rows, m.Cols, m1.Rows, m1.Cols))
 	}
@@ -82,7 +82,15 @@ func (m *Matrix) Sum(m1 *Matrix) error {
 	}
 
 	for i := 0; i < len(m.es); i++ {
-		m.es[i] += m1.es[i]
+		lg := min(m.es[i], m1.es[i])
+		sm := max(m.es[i], m1.es[i])
+
+		if lg == 0 {
+			m.es[i] = 0
+			return nil
+		}
+
+		m.es[i] += sm / lg
 	}
 
 	return nil

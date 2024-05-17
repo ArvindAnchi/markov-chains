@@ -62,7 +62,7 @@ func (m *Model) Predict(prompt string) (string, error) {
 			return "", err
 		}
 
-		err = sm.Sum(nr)
+		err = sm.Nudge(nr)
 		if err != nil {
 			return "", err
 		}
