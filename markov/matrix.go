@@ -103,17 +103,14 @@ func (m *Matrix) Inc(row, col int) error {
 	return nil
 }
 
-func (m *Matrix) Sample(rowIdx int) (uint16, error) {
-	sIdx, err := m.idxOf(rowIdx, 0)
-	eIdx := sIdx + m.Cols
-
-	if err != nil {
-		return 0, err
+func (m *Matrix) Sample() (uint16, error) {
+	if m.Rows != 1 {
+		return 0, errors.New(fmt.Sprintf("MAT_SAMPLE: Expected matrix with 1 row got %d rows", m.Rows))
 	}
 
 	t := 0
 
-	for _, tp := range m.es[sIdx:eIdx] {
+	for _, tp := range m.es {
 		t += int(tp)
 	}
 
@@ -123,7 +120,7 @@ func (m *Matrix) Sample(rowIdx int) (uint16, error) {
 
 	r := rand.IntN(t)
 
-	for i, tp := range m.es[sIdx:eIdx] {
+	for i, tp := range m.es {
 		r -= int(tp)
 
 		if r < 0 {

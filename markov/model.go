@@ -72,7 +72,7 @@ func (m *Model) Predict(prompt string) (string, error) {
 		}
 	}
 
-	p, err := sm.Sample(0)
+	p, err := sm.Sample()
 	if err != nil {
 		return "", err
 	}
