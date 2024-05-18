@@ -51,20 +51,24 @@ func (m *Model) Train(data string) error {
 func (m *Model) Predict(prompt string) (string, error) {
 	enc := m.tokenizer.Encode(prompt)
 	tok := enc[len(enc)-1]
-	v := len(*m.tokenizer.Vocab())
 
-	sm := NewMat(1, v)
-	sm.Fill(0)
+	sm, err := m.layers[0].Row(int(tok))
+	if err != nil {
+		return "", err
+	}
 
-	for _, layer := range m.layers {
-		nr, err := layer.Row(int(tok))
-		if err != nil {
-			return "", err
-		}
+	if len(m.layers) > 1 {
+		for i := 1; i < len(m.layers); i++ {
+			layer := m.layers[i]
+			nr, err := layer.Row(int(tok))
+			if err != nil {
+				return "", err
+			}
 
-		err = sm.Nudge(nr)
-		if err != nil {
-			return "", err
+			err = sm.Nudge(nr, i)
+			if err != nil {
+				return "", err
+			}
 		}
 	}
 
