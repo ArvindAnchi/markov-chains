@@ -36,11 +36,10 @@ func (m *Matrix) idxOf(row, col int) (int, error) {
 }
 
 func (m *Matrix) Print(t *Tokenizer) {
-	fmt.Print(m.es)
-	fmt.Print("[\n\t")
+	fmt.Print("[\n   ")
 
 	for j := 0; j < m.Cols; j++ {
-		fmt.Printf("%s:\t", t.Decode(uint16(j)))
+		fmt.Printf("%s ", t.Decode(uint16(j)))
 	}
 
 	fmt.Print("\n")
@@ -55,7 +54,7 @@ func (m *Matrix) Print(t *Tokenizer) {
 				panic(err)
 			}
 
-			fmt.Printf("\t%d", m.es[idx])
+			fmt.Printf(" %d", m.es[idx])
 		}
 
 		fmt.Printf("\n")

@@ -3,18 +3,16 @@ package tokenizer
 import (
 	"fmt"
 	"regexp"
-	"strings"
 )
 
 type Tokenizer struct {
 	vocab map[string]uint16
 }
 
-var re = regexp.MustCompile(`(?: ?[^\s\w\d]|(?: ?\w+|\d+))`)
+// var re = regexp.MustCompile(`(?: ?[^\s\w\d]|(?: ?\w+|\d+))`)
+var re = regexp.MustCompile(`.`)
 
 func NewTokenizer(corpus string) *Tokenizer {
-	corpus = strings.ToLower(corpus)
-
 	toks := re.FindAll([]byte(corpus), -1)
 
 	v := make(map[string]uint16)
@@ -43,8 +41,6 @@ func (t *Tokenizer) Print() {
 }
 
 func (t *Tokenizer) Encode(text string) []uint16 {
-	text = strings.ToLower(text)
-
 	splits := re.FindAll([]byte(text), -1)
 	tokens := make([]uint16, len(splits))
 
