@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"math/rand/v2"
+	"strconv"
+	"strings"
 
 	. "markov.chains/tokenizer"
 )
@@ -40,7 +42,7 @@ func (m *Matrix) Print(t *Tokenizer) {
 	fmt.Print("[\n   ")
 
 	for j := 0; j < m.Cols; j++ {
-		fmt.Printf("%s ", t.Decode(uint16(j)))
+		fmt.Printf("'%s' ", t.Decode(uint16(j)))
 	}
 
 	fmt.Print("\n")
@@ -55,7 +57,7 @@ func (m *Matrix) Print(t *Tokenizer) {
 				panic(err)
 			}
 
-			fmt.Printf(" %d", m.es[idx])
+			fmt.Printf(" %d%s", m.es[idx], strings.Repeat(" ", 3-len(strconv.FormatUint(uint64(m.es[idx]), 10))))
 		}
 
 		fmt.Printf("\n")
