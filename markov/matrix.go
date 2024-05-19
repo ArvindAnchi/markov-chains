@@ -9,9 +9,10 @@ import (
 )
 
 type Matrix struct {
-	Rows int
-	Cols int
-	es   []uint16
+	Rows    int
+	Cols    int
+	startId uint16
+	es      []uint16
 }
 
 func NewMat(rows, cols int) *Matrix {
@@ -45,7 +46,7 @@ func (m *Matrix) Print(t *Tokenizer) {
 	fmt.Print("\n")
 
 	for i := 0; i < m.Rows; i++ {
-		fmt.Printf("%s:", t.Decode(uint16(i)))
+		fmt.Printf("%s:", t.Decode(uint16(i)+m.startId))
 
 		for j := 0; j < m.Cols; j++ {
 			idx, err := m.idxOf(i, j)
@@ -114,7 +115,7 @@ func (m *Matrix) Sample() (uint16, error) {
 	}
 
 	if t == 0 {
-		return uint16(rand.IntN(m.Cols)), nil
+		return 0, errors.New("MAT_SAMPLE: Unable to sample from 0 sum probs")
 	}
 
 	r := rand.IntN(t)
@@ -139,8 +140,9 @@ func (m *Matrix) Row(rowIdx int) (*Matrix, error) {
 	}
 
 	return &Matrix{
-		Rows: 1,
-		Cols: m.Cols,
-		es:   m.es[sIdx:eIdx],
+		Rows:    1,
+		Cols:    m.Cols,
+		startId: uint16(rowIdx),
+		es:      m.es[sIdx:eIdx],
 	}, nil
 }
