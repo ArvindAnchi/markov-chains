@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand/v2"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -105,14 +106,20 @@ func (m *Matrix) Inc(row, col int) error {
 	return nil
 }
 
-func (m *Matrix) Sample() (uint16, error) {
+func (m *Matrix) Sample(topp float64) (uint16, error) {
 	if m.Rows != 1 {
 		return 0, errors.New(fmt.Sprintf("MAT_SAMPLE: Expected matrix with 1 row got %d rows", m.Rows))
 	}
 
 	t := 0
+	sMax := float64(slices.Max(m.es))
 
 	for _, tp := range m.es {
+		p := float64(tp) / sMax
+		if p < topp {
+			continue
+		}
+
 		t += int(tp)
 	}
 
@@ -123,6 +130,11 @@ func (m *Matrix) Sample() (uint16, error) {
 	r := rand.IntN(t)
 
 	for i, tp := range m.es {
+		p := float64(tp) / sMax
+		if p < topp {
+			continue
+		}
+
 		r -= int(tp)
 
 		if r < 0 {
