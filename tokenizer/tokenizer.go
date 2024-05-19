@@ -9,7 +9,6 @@ type Tokenizer struct {
 	vocab map[string]uint16
 }
 
-// var re = regexp.MustCompile(`(?: ?[^\s\w\d]|(?: ?\w+|\d+))`)
 var re = regexp.MustCompile(`.`)
 
 func NewTokenizer(corpus string) *Tokenizer {
