@@ -1,8 +1,6 @@
 package markov
 
-import (
-	. "markov.chains/tokenizer"
-)
+import . "markov.chains/tokenizer"
 
 type Model struct {
 	tokenizer *Tokenizer
@@ -48,34 +46,30 @@ func (m *Model) Train(data string) error {
 	return nil
 }
 
-func (m *Model) Predict(prompt string) (string, error) {
-	enc := m.tokenizer.Encode(prompt)
-	tok := enc[len(enc)-1]
+func (m *Model) Forward(prompt string) (*Matrix, error) {
+	toks := m.tokenizer.Encode(prompt)
+	lenc := len(toks) - 1
 
-	sm, err := m.layers[0].Row(int(tok))
+	sm, err := m.layers[0].Row(int(toks[lenc]))
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	if len(m.layers) > 1 {
-		for i := 1; i < len(m.layers); i++ {
-			layer := m.layers[i]
-			nr, err := layer.Row(int(tok))
-			if err != nil {
-				return "", err
-			}
+	for i := 1; i < len(m.layers); i++ {
+		if i > lenc {
+			break
+		}
 
-			err = sm.Nudge(nr, i)
-			if err != nil {
-				return "", err
-			}
+		nr, err := m.layers[i].Row(int(toks[lenc-i]))
+		if err != nil {
+			return nil, err
+		}
+
+		err = sm.Nudge(nr, i+1)
+		if err != nil {
+			return nil, err
 		}
 	}
 
-	p, err := sm.Sample()
-	if err != nil {
-		return "", err
-	}
-
-	return m.tokenizer.Decode(p), nil
+	return sm, nil
 }
