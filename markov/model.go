@@ -1,6 +1,10 @@
 package markov
 
-import . "markov.chains/tokenizer"
+import (
+	"errors"
+
+	. "markov.chains/tokenizer"
+)
 
 type Model struct {
 	tokenizer *Tokenizer
@@ -49,6 +53,10 @@ func (m *Model) Train(data string) error {
 func (m *Model) Forward(prompt string) (*Matrix, error) {
 	toks := m.tokenizer.Encode(prompt)
 	lenc := len(toks) - 1
+
+	if lenc < 0 {
+		return nil, errors.New("MODEL_FORWARD: Got 0 tokens")
+	}
 
 	sm, err := m.layers[0].Row(int(toks[lenc]))
 	if err != nil {
