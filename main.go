@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	. "markov.chains/markov"
 	. "markov.chains/tokenizer"
 )
@@ -20,20 +18,13 @@ func main() {
 	m := NewModel(2, t)
 
 	m.Train(d)
-	m.Print()
 
-	prompt := "The"
+	prompt := "Th"
 
-	fmt.Print(prompt)
-
-	for i := 0; i < 30; i++ {
-		s, err := m.Predict(prompt)
-		if err != nil {
-			panic(err)
-		}
-
-		prompt += s
-
-		fmt.Print(s)
+	sm, err := m.Forward(prompt)
+	if err != nil {
+		panic(err)
 	}
+
+	sm.Print(t)
 }
