@@ -5,8 +5,7 @@ import (
 	"fmt"
 	"math/rand/v2"
 	"slices"
-	"strconv"
-	"strings"
+	"sort"
 
 	. "markov.chains/tokenizer"
 )
@@ -40,31 +39,19 @@ func (m *Matrix) idxOf(row, col int) (int, error) {
 }
 
 func (m *Matrix) Print(t *Tokenizer) {
-	fmt.Print("[\n   ")
-
-	for j := 0; j < m.Cols; j++ {
-		fmt.Printf("'%s' ", t.Decode(uint16(j)))
-	}
-
-	fmt.Print("\n")
+	p := make([][2]int, m.Rows)
 
 	for i := 0; i < m.Rows; i++ {
-		fmt.Printf("%s:", t.Decode(uint16(i)+m.startId))
-
-		for j := 0; j < m.Cols; j++ {
-			idx, err := m.idxOf(i, j)
-
-			if err != nil {
-				panic(err)
-			}
-
-			fmt.Printf(" %d%s", m.es[idx], strings.Repeat(" ", 3-len(strconv.FormatUint(uint64(m.es[idx]), 10))))
-		}
-
-		fmt.Printf("\n")
+		p[i] = [2]int{i, int(m.es[i])}
 	}
 
-	fmt.Print("]\n")
+	sort.Slice(p, func(i, j int) bool {
+		return p[i][0] > p[i][1]
+	})
+
+	for i := 0; i < len(p); i++ {
+		fmt.Printf("%s: %d", t.Decode(uint16(p[i][0])), p[i][1])
+	}
 }
 
 func (m *Matrix) Fill(value uint16) {
